@@ -6,22 +6,23 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Graph {
+    //initialize variables 
     private int verticesno;
     private int edgesno ;
-    private  boolean isDigrap;
-    List <Vertex> verticess=new ArrayList<Vertex>(); 
+    private  boolean isDigrap; 
+    List <Vertex> verticess=new ArrayList<Vertex>(); //create a list of vertices
     
     
-    public void addEdge(Vertex source, Vertex destination, int weight) { 
+    public void addEdge(Vertex source, Vertex destination, int weight) { //method created to add new edges
 
-       source.adjLists.add(new Edge(source, destination, weight) );
+       source.adjLists.add(new Edge(source, destination, weight) ); //assigns the target vertex to the adjacent list of the source
        
         if(isDigrap == false) { // undirected (add the source vertex to the adjacent list of the target vertex)
-            destination.adjLists.add(new Edge(destination,source, weight) ); // directed (assigns the target vertex to the adjacent list of the source vertex)
-            edgesno += 2;
+            destination.adjLists.add(new Edge(destination,source, weight) ); 
+            edgesno += 2; // add two edges sence theres no direction 
         }
         else {
-            edgesno++;
+            edgesno++; //if the graph is directed then add 1 edge only 
         }
         
        
@@ -30,22 +31,23 @@ public class Graph {
     public void printGraph() {
 
 
-        for (int i = 0; i < verticess.size(); i++) {
+        for (int i = 0; i < verticess.size(); i++) { // for the number of vertices do the next 
             
-            System.out.print(verticess.get(i).getLabel()+": ");
-            for (int j = 0; j < verticess.get(i).adjLists.size(); j++) {
+            System.out.print(verticess.get(i).getLabel()+": "); // print the current vertex
+            for (int j = 0; j < verticess.get(i).adjLists.size(); j++) { // for the whole adjaceny list of the current vertex do the following 
               
-                System.out.print(verticess.get(i).adjLists.get(j).display_info());
+                System.out.print(verticess.get(i).adjLists.get(j).display_info()); // print all connected vertices 
             }
-            System.out.println("");
+            System.out.println(""); 
         }
         
-        System.out.println("edges number:"+edgesno+" vertices number:"+verticesno);
+        System.out.println("edges number:"+edgesno+" vertices number:"+verticesno); //print the number of edges  
     }
 
 
-    public  void read_from_file (File file) throws FileNotFoundException{
-        Scanner myReader = new Scanner(file);
+    public  void read_from_file (File file) throws FileNotFoundException{ // method to read vertices and their edges from a giver file 
+        //initialize variables
+        Scanner myReader = new Scanner(file);   
         int  Enum=0; 
         String label;
         
@@ -74,14 +76,15 @@ public class Graph {
             for (int i = 0; i < 2; i++) {
                 label=myReader.next();
                 
-                if(verticess.isEmpty()){
+                if(verticess.isEmpty()){ //if the list of vertices is empty, then add the current vertex 
                   verticess.add(new Vertex(label));
-                  index1=SearchVertex(label,verticess);
+                  index1=SearchVertex(label,verticess); 
                 }else{
+                  //confirm wheather the vertex already exists in the list or not   
                   find=SearchVertex(label,verticess);
                      
-                     if(find>=0){
-                       //this vertex is exist in the list, no need to create new vertex
+                     if(find>=0){ 
+                       //this vertex exists in the list, no need to create new vertex
                        // find the index of this vertex then assign it to the index 
                          if(index1 == -1){index1=find;}
                          else{index2=find;}
