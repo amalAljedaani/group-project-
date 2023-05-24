@@ -5,60 +5,53 @@ import java.util.*;
 
 
 public class MHPrimAlg extends MSTAlgorithm{
-    private Graph graph;
-   // private List<Edge> mst;
-
     public MHPrimAlg(Graph graph) {
         super(graph);
-        this.graph = graph;
-      //  this.mst = new ArrayList<>();
-        prim();
     }
 
-    private void prim() {
-        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparing(Edge::getWeight));
+    
+    @Override
+    public List<Edge> displayResultingMST() {
+        MSTResultList = new ArrayList<>();
         Set<Vertex> visited = new HashSet<>();
-        Vertex start = graph.getVertices().get(0);
-        visited.add(start);
-        pq.addAll(getEdgesFrom(start));
-        while (!pq.isEmpty()) {
-            Edge edge = pq.poll();
-            Vertex u = edge.getSource();
-            Vertex v = edge.getDestination();
-            if (!visited.contains(v)) {
-                visited.add(v);
-                MSTResultList.add(edge);
-                pq.addAll(getEdgesFrom(v));
+        PriorityQueue<Edge> minHeap = new PriorityQueue<>(Comparator.comparingInt(Edge::getWeight));
+        Vertex startVertex = graph.getVertices().get(0);
+        visited.add(startVertex);
+
+        while (visited.size() < graph.getVertices().size()) {
+            List<Edge> outgoingEdges = getOutgoingEdges(visited);
+            for (Edge edge : outgoingEdges) {
+                minHeap.offer(edge);
+            }
+
+            Edge minEdge = minHeap.poll();
+            Vertex nextVertex = minEdge.getDestination();
+
+            if (!visited.contains(nextVertex)) {
+                visited.add(nextVertex);
+                MSTResultList.add(minEdge);
             }
         }
-    }
 
-    private List<Edge> getEdgesFrom(Vertex vertex) {
-        List<Edge> edgesFrom = new ArrayList<>();
-        for (Edge edge : graph.getEdges()) {
-            if (edge.getSource().equals(vertex) || edge.getDestination().equals(vertex)) {
-                edgesFrom.add(edge);
-            }
-        }
-        return edgesFrom;
-    }
-
-    public List<Edge> getMST() {
         return MSTResultList;
     }
 
-    @Override
-    public void displayResultingMST() {
-        int cost=0;
-      for(Edge e: MSTResultList){
-          System.out.println( e.display_info());
-          cost+=e.getWeight();
-      }
-        System.out.println("total cost is: "+cost);
-      
+    private List<Edge> getOutgoingEdges(Set<Vertex> visited) {
+        List<Edge> outgoingEdges = new ArrayList<>();
+        for (Edge edge : graph.getEdges()) {
+            Vertex source = edge.getSource();
+            Vertex destination = edge.getDestination();
+            if (visited.contains(source) && !visited.contains(destination)) {
+                outgoingEdges.add(edge);
+            }
+        }
+        return outgoingEdges;
     }
     
-   
+    public List<Edge> getMST() {
+        return MSTResultList;
+    }
     
 }
+
 
