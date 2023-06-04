@@ -1,0 +1,10 @@
+digraph 0
+6 8
+A B 1
+B C 3
+C D 4
+D E 7
+E F 8
+F C 6
+C A 2 
+C E 5
